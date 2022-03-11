@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+
+  phonedb:
+    container_name: phonedb
+    restart: always
+    ports:
+        - "27017:27017" 
+    volumes:
+        - mongo_data:/data/db 
+
+
+  rise.phone.api:
+    container_name: rise.phone.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "PhoneDbSettings:ConnectionString=mongodb://phonedb:27017"
+    depends_on:
+      - catalogdb
+    ports:
+      - "8000:80"

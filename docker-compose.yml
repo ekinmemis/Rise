@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  phonedb:
+    image: mongo
+
+  rise.phone.api:
+    image: ${DOCKER_REGISTRY-}mshopcatalogapi
+    build:
+      context: .
+      dockerfile: src/Services/Phone/Presentation/Rise.Phone.Api/Dockerfile
+
+volumes:
+  mongo_data:

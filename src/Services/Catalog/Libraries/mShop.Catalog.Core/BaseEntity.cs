@@ -1,0 +1,18 @@
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace Rise.Phone.Core
+{
+    /// <summary>
+    /// Defines the <see cref="BaseEntity" />.
+    /// </summary>
+    public partial class BaseEntity
+    {
+        /// <summary>
+        /// Gets or sets the Id.
+        /// </summary>
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+    }
+}

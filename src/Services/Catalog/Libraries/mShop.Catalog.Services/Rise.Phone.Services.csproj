@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\mShop.Catalog.Core\Rise.Phone.Core.csproj" />
+    <ProjectReference Include="..\mShop.Catalog.Data\Rise.Phone.Data.csproj" />
+  </ItemGroup>
+
+</Project>
