@@ -1,4 +1,5 @@
 ﻿using Rise.Phone.Core;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,70 @@ using System.Threading.Tasks;
 
 namespace Rise.Phone.Data
 {
+    #region Interfaces
+
     /// <summary>
     /// Defines the <see cref="IRepository{TEntity}" />.
     /// </summary>
     /// <typeparam name="TEntity">.</typeparam>
-    /// <typeparam name="string">.</typeparam>
     public partial interface IRepository<TEntity> where TEntity : BaseEntity
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets the Table.
+        /// </summary>
+        IQueryable<TEntity> Table { get; }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The Delete.
+        /// </summary>
+        /// <param name="filter">The filter<see cref="Expression{Func{TEntity, bool}}"/>.</param>
+        void Delete(Expression<Func<TEntity, bool>> filter);
+
+        /// <summary>
+        /// The Delete.
+        /// </summary>
+        /// <param name="id">The id<see cref="string"/>.</param>
+        void Delete(string id);
+
+        /// <summary>
+        /// The Delete.
+        /// </summary>
+        /// <param name="entity">The entity<see cref="TEntity"/>.</param>
+        void Delete(TEntity entity);
+
+        /// <summary>
+        /// The DeleteAsync.
+        /// </summary>
+        /// <param name="filter">The filter<see cref="Expression{Func{TEntity, bool}}"/>.</param>
+        /// <returns>The <see cref="Task"/>.</returns>
+        Task DeleteAsync(Expression<Func<TEntity, bool>> filter);
+
+        /// <summary>
+        /// The DeleteAsync.
+        /// </summary>
+        /// <param name="id">The id<see cref="string"/>.</param>
+        /// <returns>The <see cref="Task"/>.</returns>
+        Task DeleteAsync(string id);
+
+        /// <summary>
+        /// The DeleteAsync.
+        /// </summary>
+        /// <param name="entity">The entity<see cref="TEntity"/>.</param>
+        /// <returns>The <see cref="Task"/>.</returns>
+        Task DeleteAsync(TEntity entity);
+
+        /// <summary>
+        /// The GetAll.
+        /// </summary>
+        /// <returns>The <see cref="List{TEntity}"/>.</returns>
+        List<TEntity> GetAll();
+
         /// <summary>
         /// The GetById.
         /// </summary>
@@ -82,48 +140,8 @@ namespace Rise.Phone.Data
         /// <returns>The <see cref="Task"/>.</returns>
         Task UpdateAsync(TEntity entity, Expression<Func<TEntity, bool>> predicate);
 
-        /// <summary>
-        /// The Delete.
-        /// </summary>
-        /// <param name="entity">The entity<see cref="TEntity"/>.</param>
-        void Delete(TEntity entity);
-
-        /// <summary>
-        /// The Delete.
-        /// </summary>
-        /// <param name="id">The id<see cref="string"/>.</param>
-        void Delete(string id);
-
-        /// <summary>
-        /// The Delete.
-        /// </summary>
-        /// <param name="filter">The filter<see cref="Expression{Func{TEntity, bool}}"/>.</param>
-        void Delete(Expression<Func<TEntity, bool>> filter);
-
-        /// <summary>
-        /// The DeleteAsync.
-        /// </summary>
-        /// <param name="entity">The entity<see cref="TEntity"/>.</param>
-        /// <returns>The <see cref="Task"/>.</returns>
-        Task DeleteAsync(TEntity entity);
-
-        /// <summary>
-        /// The DeleteAsync.
-        /// </summary>
-        /// <param name="id">The id<see cref="string"/>.</param>
-        /// <returns>The <see cref="Task"/>.</returns>
-        Task DeleteAsync(string id);
-       
-        /// <summary>
-        /// The DeleteAsync.
-        /// </summary>
-        /// <param name="filter">The filter<see cref="Expression{Func{TEntity, bool}}"/>.</param>
-        /// <returns>The <see cref="Task"/>.</returns>
-        Task DeleteAsync(Expression<Func<TEntity, bool>> filter);
-
-        /// <summary>
-        /// Gets the Table.
-        /// </summary>
-        IQueryable<TEntity> Table { get; }
+        #endregion
     }
+
+    #endregion
 }

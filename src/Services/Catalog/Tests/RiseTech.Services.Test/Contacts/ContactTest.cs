@@ -23,9 +23,9 @@ namespace Rise.Services.Test.Contacts
         {
             Mock<IRepository<Contact>> mockRepo = new Mock<IRepository<Contact>>();
 
-            mockRepo.Setup(p => p.Table.ToList()).Returns(_contacts);
+            mockRepo.Setup(p => p.GetAll()).Returns(_contacts);
 
-            mockRepo.Setup(p => p.GetById(It.IsAny<string>())).Returns(new Func<int, Contact>(id => _contacts.Find(p => p.Id.Equals(id))));
+            mockRepo.Setup(p => p.GetById(It.IsAny<string>())).Returns(new Func<string, Contact>(id => _contacts.Find(p => p.Id.Equals(id))));
 
             mockRepo.Setup(p => p.Insert(It.IsAny<Contact>())).Callback(new Action<Contact>(newContact =>
             {
@@ -99,20 +99,11 @@ namespace Rise.Services.Test.Contacts
         }
 
         [Test]
-        public void can_get_all()
-        {
-            List<Contact> contacts = _contactService.GetAll();
-
-            contacts.ShouldNotBeNull();
-        }
-
-        [Test]
         public void can_add_contact()
         {
-            DateTime now = DateTime.Now;
             Contact contact = new Contact()
             {
-                Id = "",
+                Id = "60045edfd72749acbdd27b45",
                 Deleted = false,
             };
 

@@ -16,10 +16,10 @@ namespace Rise.Phone.Services
         /// <summary>
         /// The GetAll.
         /// </summary>
-        /// <returns>The <see cref="List{Person}"/>.</returns>
+        /// <returns>The <see cref="IQueryable{Person}"/>.</returns>
         public List<Person> GetAll()
         {
-            return _repository.Table.ToList();
+            return _repository.GetAll();
         }
 
         /// <summary>

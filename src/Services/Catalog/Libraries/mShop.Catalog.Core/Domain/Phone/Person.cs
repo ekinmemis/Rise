@@ -41,6 +41,7 @@ namespace Rise.Phone.Core.Domain.Phone
         {
             return new Person()
             {
+                Id = Id,
                 Name = Name,
                 Surname = Surname,
                 Company = Company

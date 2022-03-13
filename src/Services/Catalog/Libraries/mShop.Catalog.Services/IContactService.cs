@@ -2,6 +2,7 @@
 using Rise.Phone.Core.Domain.Phone;
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rise.Phone.Services
 {
@@ -15,9 +16,9 @@ namespace Rise.Phone.Services
         #region Methods
 
         /// <summary>
-        /// The SearchPersons.
+        /// The GetAll.
         /// </summary>
-        /// <returns>The <see cref="List{Contact}"/>.</returns>
+        /// <returns>The <see cref="IQueryable{Contact}"/>.</returns>
         List<Contact> GetAll();
 
         /// <summary>

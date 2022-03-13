@@ -18,6 +18,7 @@ namespace Rise.Phone.Core.Domain.Phone
         {
             return new Contact()
             {
+                Id = Id,
                 Name = Name,
                 Phone = Phone,
                 Email = Email,

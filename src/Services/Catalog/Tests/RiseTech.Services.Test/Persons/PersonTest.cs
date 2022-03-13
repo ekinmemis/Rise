@@ -13,42 +13,107 @@ using System.Linq;
 
 namespace Rise.Services.Test.Persons
 {
+    /// <summary>
+    /// Defines the <see cref="PersonTest" />.
+    /// </summary>
     [TestFixture]
     public class PersonTest
     {
-        private List<Person> _persons;
+        #region Fields
+
+        /// <summary>
+        /// Defines the _personRepository.
+        /// </summary>
         private IRepository<Person> _personRepository;
+
+        /// <summary>
+        /// Defines the _persons.
+        /// </summary>
+        private List<Person> _persons;
+
+        /// <summary>
+        /// Defines the _personService.
+        /// </summary>
         private IPersonService _personService;
 
-        private IRepository<Person> SetUpPersonRepository()
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The can_add_person.
+        /// </summary>
+        [Test]
+        public void can_add_person()
         {
-            Mock<IRepository<Person>> mockRepo = new Mock<IRepository<Person>>();
-
-            mockRepo.Setup(p => p.Table.ToList()).Returns(_persons);
-
-            mockRepo.Setup(p => p.GetById(It.IsAny<string>())).Returns(new Func<int, Person>(id => _persons.Find(p => p.Id.Equals(id))));
-
-            mockRepo.Setup(p => p.Insert(It.IsAny<Person>())).Callback(new Action<Person>(newPerson =>
+            Person appUser = new Person()
             {
-                dynamic maxPersonID = _persons.Last().Id; dynamic nextPersonID = maxPersonID + 1; newPerson.Id = nextPersonID; _persons.Add(newPerson);
-            }));
+                Id = "60045ecceb9142723a47eadb",
+                Name = "Ekin",
+                Surname = "Memis",
+                Company = "Rise Technology",
+                CreatedById = 1,
+                UpdatedById = 1,
+                DeletedById = 0,
+                Active = true,
+                Deleted = false,
+                CreatedOnUtc = DateTime.UtcNow,
+                UpdatedOnUtc = DateTime.UtcNow
+            };
 
-            mockRepo.Setup(p => p.Update(It.IsAny<Person>())).Callback(new Action<Person>(person =>
-            {
-                Person oldPerson = _persons.Find(a => a.Id == person.Id); oldPerson = person;
-            }));
+            _personRepository.Insert(appUser);
 
-            mockRepo.Setup(p => p.Delete(It.IsAny<Person>())).Callback(new Action<Person>(person =>
-            {
-                Person personToRemove = _persons.Find(a => a.Id == person.Id); if (personToRemove != null)
-                {
-                    _persons.Remove(personToRemove);
-                }
-            }));
+            Person addedUser = _personRepository.GetById("60045ecceb9142723a47eadb");
 
-            return mockRepo.Object;
+            addedUser.ShouldNotBeNull();
         }
 
+        /// <summary>
+        /// The can_delete_person.
+        /// </summary>
+        [Test]
+        public void can_delete_person()
+        {
+            _personRepository.Delete(_personRepository.GetById("60045ecceb9142723a47eadb"));
+
+            Person deletedUser = _personRepository.GetById("60045ecceb9142723a47eadb");
+
+            deletedUser.ShouldBeNull();
+        }
+
+
+        /// <summary>
+        /// The can_update_person.
+        /// </summary>
+        [Test]
+        public void can_update_person()
+        {
+            Person person = _personRepository.GetById("60045ecceb9142723a47eadb");
+
+            person.Name = "First Name -UPDATED";
+
+            _personRepository.Update(person);
+
+            Person updatedUser = _personRepository.GetById("60045ecceb9142723a47eadb");
+
+            updatedUser.ShouldNotBeNull();
+        }
+
+        /// <summary>
+        /// The Setup.
+        /// </summary>
+        [SetUp]
+        public void Setup()
+        {
+            _persons = SetUpPersons();
+            _personRepository = SetUpPersonRepository();
+            _personService = new PersonService();
+        }
+
+        /// <summary>
+        /// The SetUpPersons.
+        /// </summary>
+        /// <returns>The <see cref="List{Person}"/>.</returns>
         private static List<Person> SetUpPersons()
         {
             List<Person> persons = new List<Person>
@@ -86,69 +151,39 @@ namespace Rise.Services.Test.Persons
             return persons;
         }
 
-        [SetUp]
-        public void Setup()
+        /// <summary>
+        /// The SetUpPersonRepository.
+        /// </summary>
+        /// <returns>The <see cref="IRepository{Person}"/>.</returns>
+        private IRepository<Person> SetUpPersonRepository()
         {
-            _persons = SetUpPersons();
-            _personRepository = SetUpPersonRepository();
-            _personService = new PersonService();
-        }
+            Mock<IRepository<Person>> mockRepo = new Mock<IRepository<Person>>();
 
-        [Test]
-        public void can_get_all()
-        {
-            var persons = _personService.GetAll();
+            mockRepo.Setup(p => p.GetAll()).Returns(_persons);
 
-            persons.ShouldNotBeNull();
-        }
+            mockRepo.Setup(p => p.GetById(It.IsAny<string>())).Returns(new Func<string, Person>(id => _persons.Find(p => p.Id.Equals(id))));
 
-        [Test]
-        public void can_add_application_person()
-        {
-            Person appUser = new Person()
+            mockRepo.Setup(p => p.Insert(It.IsAny<Person>())).Callback(new Action<Person>(newPerson =>
             {
-                Id = "60045ecceb9142723a47eadb",
-                Name = "Ekin",
-                Surname = "Memis",
-                Company = "Rise Technology",
-                CreatedById = 1,
-                UpdatedById = 1,
-                DeletedById = 0,
-                Active = true,
-                Deleted = false,
-                CreatedOnUtc = DateTime.UtcNow,
-                UpdatedOnUtc = DateTime.UtcNow
-            };
+                dynamic maxPersonID = _persons.Last().Id; dynamic nextPersonID = maxPersonID + 1; newPerson.Id = nextPersonID; _persons.Add(newPerson);
+            }));
 
-            _personRepository.Insert(appUser);
+            mockRepo.Setup(p => p.Update(It.IsAny<Person>())).Callback(new Action<Person>(person =>
+            {
+                Person oldPerson = _persons.Find(a => a.Id == person.Id); oldPerson = person;
+            }));
 
-            Person addedUser = _personRepository.GetById("60045ecceb9142723a47eadb");
+            mockRepo.Setup(p => p.Delete(It.IsAny<Person>())).Callback(new Action<Person>(person =>
+            {
+                Person personToRemove = _persons.Find(a => a.Id == person.Id); if (personToRemove != null)
+                {
+                    _persons.Remove(personToRemove);
+                }
+            }));
 
-            addedUser.ShouldNotBeNull();
+            return mockRepo.Object;
         }
 
-        [Test]
-        public void can_update_application_person()
-        {
-            Person person = _personRepository.GetById("60045ecceb9142723a47eadb");
-
-            person.Name = "First Name -UPDATED";
-
-            _personRepository.Update(person);
-
-            Person updatedUser = _personRepository.GetById("60045ecceb9142723a47eadb");
-
-            updatedUser.ShouldNotBeNull();
-        }
-
-        [Test]
-        public void can_delete_application_person()
-        {
-            _personRepository.Delete(_personRepository.GetById("60045ecceb9142723a47eadb"));
-
-            Person deletedUser = _personRepository.GetById("60045ecceb9142723a47eadb");
-
-            deletedUser.ShouldBeNull();
-        }
+        #endregion
     }
 }

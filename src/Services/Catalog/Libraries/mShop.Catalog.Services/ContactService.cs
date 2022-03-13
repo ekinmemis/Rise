@@ -19,7 +19,7 @@ namespace Rise.Phone.Services
         /// <returns>The <see cref="List{Contact}"/>.</returns>
         public List<Contact> GetAll()
         {
-            return _repository.Table.ToList();
+            return _repository.GetAll();
         }
 
         /// <summary>
@@ -32,14 +32,16 @@ namespace Rise.Phone.Services
         /// <returns>The <see cref="IPagedList{Contact}"/>.</returns>
         public IPagedList<Contact> SearchContacts(string name = "", int pageIndex = 0, int pageSize = int.MaxValue, bool loadOnlyTotalCount = false)
         {
-            var query = _repository.Table;
+            IQueryable<Contact> query = _repository.Table;
 
             if (!string.IsNullOrEmpty(name))
+            {
                 query = query.Where(p => p.Name.Contains(name));
+            }
 
             query = query.OrderBy(p => p.Id);
 
-            var data = new PagedList<Contact>(query, pageIndex, pageSize, loadOnlyTotalCount);
+            PagedList<Contact> data = new PagedList<Contact>(query, pageIndex, pageSize, loadOnlyTotalCount);
 
             return data;
         }

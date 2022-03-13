@@ -2,6 +2,7 @@
 using Rise.Phone.Core.Domain.Phone;
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rise.Phone.Services
 {

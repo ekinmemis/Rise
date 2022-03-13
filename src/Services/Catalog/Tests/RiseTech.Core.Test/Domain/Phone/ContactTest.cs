@@ -23,7 +23,7 @@ namespace Rise.Core.Test.Domain.Phone
         {
             Contact Contact = new Contact
             {
-                Id = "60045ee5f41e850d9359d903",
+                Id = "60045ee5f41e850d9359d93",
                 CreatedById = 1,
                 UpdatedById = 1,
                 DeletedById = 0,
@@ -41,7 +41,7 @@ namespace Rise.Core.Test.Domain.Phone
             Contact newContact = Contact.Clone() as Contact;
 
             newContact.ShouldNotBeNull();
-            newContact.Id.ShouldEqual("60045ee5f41e850d9359d903");
+            newContact.Id.ShouldEqual("60045ee5f41e850d9359d93");
             newContact.Deleted.ShouldEqual(false);
         }
 
